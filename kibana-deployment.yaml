@@ -17,6 +17,11 @@ spec:
       labels:
         k8s-app: kibana-logging
     spec:
+      serviceAccountName: kibana-logging  # Use an appropriate ServiceAccount if needed
+      securityContext:
+        runAsUser: 1000  # Avoid running as root
+        runAsGroup: 3000
+        fsGroup: 2000
       containers:
       - name: kibana-logging
         image: docker.elastic.co/kibana/kibana-oss:6.2.4
@@ -28,8 +33,8 @@ spec:
             cpu: 100m
             memory: 512Mi
         env:
-          - name: ELASTICSEARCH_URL
-            value: http://elasticsearch-logging:9200
+        - name: ELASTICSEARCH_URL
+          value: http://elasticsearch-logging:9200
         ports:
         - containerPort: 5601
           name: ui
@@ -50,6 +55,7 @@ spec:
           timeoutSeconds: 5
           periodSeconds: 10
           failureThreshold: 3
+
 ---
 apiVersion: v1
 kind: Service
@@ -69,26 +75,4 @@ spec:
     targetPort: ui
   selector:
     k8s-app: kibana-logging
----
-# Uncomment and modify the Ingress as needed
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: logs-ingress
-#   namespace: dev  # Ensure namespace matches your deployment/service
-#   labels:
-#     app: logs
-#   annotations:
-#     kubernetes.io/ingress.class: traefik
-# spec:
-#   rules:
-#   - host: logs.example.com
-#     http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: kibana-logging
-#             port:
-#               number: 5601
+
