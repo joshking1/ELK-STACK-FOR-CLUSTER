@@ -41,6 +41,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ---
 # Elasticsearch StatefulSet Deployment
+# Elasticsearch StatefulSet Deployment
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -88,6 +89,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: discovery.seed_hosts
+          value: "elasticsearch-logging-0,elasticsearch-logging-1"
+        - name: cluster.initial_master_nodes
+          value: "elasticsearch-logging-0,elasticsearch-logging-1"
         readinessProbe:
           httpGet:
             path: /_cluster/health?local=true
