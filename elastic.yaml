@@ -68,11 +68,11 @@ spec:
         name: elasticsearch-logging
         resources:
           limits:
-            cpu: 2000m
-            memory: 4Gi
+            cpu: 1000m        # Updated CPU limit (1 core)
+            memory: 2Gi       # Updated memory limit (2Gi)
           requests:
-            cpu: 500m
-            memory: 2Gi
+            cpu: 250m         # Updated CPU request (0.25 core)
+            memory: 1Gi       # Updated memory request (1Gi)
         ports:
         - containerPort: 9200
           name: http
@@ -160,3 +160,4 @@ spec:
   selector:
     k8s-app: elasticsearch-logging
     version: v7.5.0
+
