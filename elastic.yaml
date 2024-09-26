@@ -149,15 +149,16 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 9200
+    - name: http
+      port: 9200
       targetPort: 9200
       protocol: TCP
-      nodePort: 31335
-    - port: 9300
+    - name: transport
+      port: 9300
       targetPort: 9300
       protocol: TCP
-      nodePort: 31336
   selector:
     k8s-app: elasticsearch-logging
     version: v7.5.0
+
 
